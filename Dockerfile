@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
-ARG PYTHON_NAME="python3.12"
-ARG PYTHON_VERSION="3.12.8-3"
+ARG PYTHON_NAME="python3.13"
+ARG PYTHON_VERSION="3.13.2-1"
 ARG DIST_NAME="trixie"
 
 # -------------------- Preparation --------------------
@@ -16,7 +16,7 @@ Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg" \
 RUN echo "\
 Package: *\n\
 Pin: release n=${DIST_NAME}\n\
-Pin-Priority: 1 \n\
+Pin-Priority: 1\n\
 \n\
 Package: libjs-sphinxdoc sphinx-common python3-sphinx python3-docs-theme python-babel-localedata docutils-common python3-alabaster python3-babel python3-docutils python3-pygments python3-requests\n\
 Pin: release n=${DIST_NAME}\n\
@@ -57,28 +57,20 @@ FROM pre-build AS build-system
 # This command is allowed to fail however if something changes in the future
 RUN 	apt-get install -y --no-install-recommends \
 	diffstat docutils-common ed fontconfig-config fonts-dejavu-core libbrotli1 \
-	libbsd0 libc-l10n libdrm-amdgpu1 libdrm-common libdrm-intel1 libdrm-nouveau2 \
-	libdrm-radeon1 libdrm2 libedit2 libfontconfig1 libfontenc1 libfreetype6 libgl1 \
-	libgl1-mesa-dri libglapi-mesa libglvnd0 libglx-mesa0 libglx0 libice6 \
-	libjs-jquery libjs-sphinxdoc libjs-underscore libjson-perl libllvm15 \
-	libpciaccess0 libpixman-1-0 libpkgconf3 libpng16-16 libsensors-config \
-	libsensors5 libsm6 libtcl8.6 libtext-unidecode-perl libtk8.6 libunwind8 \
-	libx11-6 libx11-data libx11-xcb1 libxau6 libxaw7 libxcb-dri2-0 libxcb-dri3-0 \
-	libxcb-glx0 libxcb-present0 libxcb-randr0 libxcb-shm0 libxcb-sync1 \
-	libxcb-xfixes0 libxcb1 libxdmcp6 libxext6 libxfixes3 libxfont2 libxft2 \
-	libxkbfile1 libxml-libxml-perl libxml-namespacesupport-perl \
-	libxml-sax-base-perl libxml-sax-perl libxmu6 libxmuu1 libxpm4 libxrandr2 \
-	libxrender1 libxshmfence1 libxss1 libxt6 libxxf86vm1 libz3-4 locales-all \
-	lsb-release net-tools pkgconf-bin python-babel-localedata python3-alabaster \
-	python3-babel python3-certifi python3-chardet python3-charset-normalizer \
-	python3-distutils python3-docs-theme python3-docutils python3-idna \
-	python3-imagesize python3-jinja2 python3-lib2to3 python3-markupsafe \
-	python3-packaging python3-pkg-resources python3-pygments python3-requests \
-	python3-roman python3-six python3-snowballstemmer python3-sphinx python3-tz \
-	python3-urllib3 quilt sgml-base sharutils sphinx-common tcl tcl8.6 tex-common \
-	texinfo time tk tk8.6 ucf x11-common x11-xkb-utils x11proto-core-dev \
-	x11proto-dev xauth xkb-data xml-core xorg-sgml-doctools xserver-common \
-	xtrans-dev xvfb || \
+	libbsd0 libc-l10n libfontconfig1 libfreetype6 libjs-jquery libjson-perl \
+	libjs-sphinxdoc libjs-underscore libpkgconf3 libpng16-16 libtcl8.6 \
+	libtext-unidecode-perl libtk8.6 libx11-6 libx11-data libxau6 libxcb1 libxdmcp6 \
+	libxext6 libxft2 libxml-libxml-perl libxml-namespacesupport-perl \
+	libxml-sax-base-perl libxml-sax-perl libxrender1 libxss1 locales-all \
+	lsb-release net-tools pkgconf-bin python3-alabaster python3-babel \
+	python3-certifi python3-chardet python3-charset-normalizer python3-defusedxml \
+	python3-docs-theme python3-docutils python3-idna python3-imagesize \
+	python3-jinja2 python3-markupsafe python3-packaging python3-pkg-resources \
+	python3-pygments python3-requests python3-roman python3-six \
+	python3-snowballstemmer python3-sphinx python3-urllib3 python-babel-localedata \
+	quilt sgml-base sharutils sphinx-common tcl tcl8.6 tex-common texinfo time tk \
+	tk8.6 ucf x11-common x11proto-core-dev x11proto-dev xml-core xorg-sgml-doctools \
+	xtrans-dev || \
 	echo "::warning::Loading packages failed!" | tee -a /github_output
 COPY --from=source /usr/local/src/python-source /usr/local/src/python-source
 WORKDIR /usr/local/src/python-source
@@ -113,7 +105,7 @@ RUN cd native-debs && apt-get install -y ./lib${PYTHON_NAME}-minimal*.deb \
 	./${PYTHON_NAME}-minimal*.deb \
 	./${PYTHON_NAME}_*.deb
 
-RUN DEB_BUILD_PROFILES='nocheck nobench' mk-build-deps --arch ${ARCH} --host-arch ${ARCH}
+RUN DEB_BUILD_PROFILES='nocheck nobench' DEB_BUILD_OPTIONS='nocheck nobench' mk-build-deps --arch ${ARCH} --host-arch ${ARCH}
 # We don't need build-essential for cross-compiling, but mk-build-deps insists of adding it
 # Hacky way to remove that:
 RUN	mkdir rebuild-cross-deps && \

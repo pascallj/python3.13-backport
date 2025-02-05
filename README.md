@@ -1,12 +1,12 @@
-# Python 3.12 backport for Debian 12 bookworm
-The aim of this project is to provide a Python 3.12 backport to Debian bookworm. Packages are of course much better manageable than compiling the source from scratch. In my opinion it is also more manageable than using `pyenv`. By using my packages you will also be sure to get the latest patches (on a best effort basis).
+# Python 3.13 backport for Debian 12 bookworm
+The aim of this project is to provide a Python 3.13 backport to Debian bookworm. Packages are of course much better manageable than compiling the source from scratch. In my opinion it is also more manageable than using `pyenv`. By using my packages you will also be sure to get the latest patches (on a best effort basis).
 
-Motivation for this project was the [removal of Python 3.11 support in Home Assistant 2024.4](https://github.com/home-assistant/core/pull/108160). Debian bookworm doesn't have Python 3.12 however.
+Motivation for this project was the [removal of Python 3.12 support in Home Assistant 2025.2](https://github.com/home-assistant/core/pull/130425). Debian bookworm doesn't have Python 3.13 however.
 
 ## Scope
-The scope of this project is limited to backporting just Python 3.12 itself. So no defaults (which provide virtual packages so `python3` get's automatically linked to `python3.12`) and no precompiled pip-packages or wheels besides pip itself. Therefore it can coexist with your regular Python (3.11) installation without any interference and still being simple to maintain. It's main use is for in virtual environments where you can use pip to compile and install any packages you desire. It does provide all the packages and dependencies needed to create a Python 3.12 virtual environment.
+The scope of this project is limited to backporting just Python 3.13 itself. So no defaults (which provide virtual packages so `python3` get's automatically linked to `python3.13`) and no precompiled pip-packages or wheels besides pip itself. Therefore it can coexist with your regular Python (3.11) installation without any interference and still being simple to maintain. It's main use is for in virtual environments where you can use pip to compile and install any packages you desire. It does provide all the packages and dependencies needed to create a Python 3.13 virtual environment.
 
-Because the version of pip present in Debian 12 bookworm isn't compatible with Python 3.12, I've included pip inside the Python package. Normally pip on Debian is inside the `python3-pip` package, but backporting that would clash with an existing pip installation. This is the easiest solution for now.
+Because the version of pip present in Debian 12 bookworm isn't compatible with Python 3.13, I've included pip inside the Python package. Normally pip on Debian is inside the `python3-pip` package, but backporting that would clash with an existing pip installation. This is the easiest solution for now.
 
 ## Repository
 Packages can be downloaded from my repository at `deb.pascalroeleven.nl`. First you should also add my PGP (which you can get from my website via https) to APT's sources keyring:
@@ -18,14 +18,14 @@ Now you can add my repository by adding a file with my repository to the `source
 ```sh
 cat <<EOF | sudo tee /etc/apt/sources.list.d/pascalroeleven.sources
 Types: deb
-URIs: http://deb.pascalroeleven.nl/python3.12
+URIs: http://deb.pascalroeleven.nl/python3.13
 Suites: bookworm-backports
 Components: main
 Signed-By: /etc/apt/keyrings/deb-pascalroeleven.gpg
 EOF
 ```
 
-After running `apt update` you should now be able to install Python 3.12 related packages.
+After running `apt update` you should now be able to install Python 3.13 related packages.
 
 Packages are built using Github Actions along with a file containing the checksums of all packages. Therefore, you can compare the checksums of the packages in the repository with the checksums in Github Actions and trace the entire process (up to 90 days after the build after which the artifacts and logs get removed). This way, if you trust the Github Actions build system, you can be sure that the packages I provide are actually built using the instructions in this repo.
 

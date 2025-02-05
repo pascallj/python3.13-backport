@@ -3,7 +3,7 @@ Author: Pascal Roeleven <dev@pascalroeleven.nl>
 
 --- a/debian/rules
 +++ b/debian/rules
-@@ -333,7 +333,7 @@
+@@ -330,7 +330,7 @@
  	test_threading test_threading_local test_threadsignals \
  	test_concurrent_futures test_ctypes \
  	test_dbm_dumb test_dbm_ndbm test_pydoc test_sundry \
@@ -12,15 +12,15 @@ Author: Pascal Roeleven <dev@pascalroeleven.nl>
  
  # TODO: these hang/fail with new OpenSSL
  PROFILE_EXCLUDES += \
-@@ -370,7 +370,6 @@
+@@ -367,7 +367,6 @@
  		--enable-loadable-sqlite-extensions \
  		--with-dbmliborder=$(dbmliborder) \
  		--with-computed-gotos \
 -		--without-ensurepip \
  		--with-system-expat \
+ 		$(if $(filter hurd, $(DEB_HOST_ARCH_OS)),,--with-dtrace) \
  		--with-ssl-default-suites=openssl \
- 		--with-wheel-pkg-dir=/usr/share/python-wheels/ \
-@@ -580,7 +579,7 @@
+@@ -575,7 +574,7 @@
  endif
  TESTOPTS = -j 1 -w -u$(TEST_RESOURCES) --timeout=3600
  TEST_EXCLUDES =
@@ -29,8 +29,8 @@ Author: Pascal Roeleven <dev@pascalroeleven.nl>
  ifeq ($(on_buildd),yes)
    TEST_EXCLUDES += test_tcl test_codecmaps_cn test_codecmaps_hk \
          test_codecmaps_jp test_codecmaps_kr test_codecmaps_tw \
-@@ -931,11 +930,6 @@
- 	rm -f $(d)/$(scriptdir)/lib2to3/*.pickle
+@@ -910,11 +909,6 @@
+ 	rm -rf $(d)/usr/lib/python$(VER)/ctypes/macholib
  	rm -f $(d)/usr/share/man/man1/python3.1
  
 -	if [ -d $(d)/$(scriptdir)/ensurepip/_bundled ]; then \
@@ -43,29 +43,29 @@ Author: Pascal Roeleven <dev@pascalroeleven.nl>
  
 --- a/Lib/ensurepip/__init__.py
 +++ b/Lib/ensurepip/__init__.py
-@@ -52,7 +52,7 @@
+@@ -44,7 +44,7 @@
  # policies recommend against bundling dependencies. For example, Fedora
  # installs wheel packages in the /usr/share/python-wheels/ directory and don't
  # install the ensurepip._bundled package.
--_WHEEL_PKG_DIR = sysconfig.get_config_var('WHEEL_PKG_DIR')
-+_WHEEL_PKG_DIR = sysconfig.get_config_var('DO_NOT_USE_WHEEL_PKG_DIR')
- 
- 
- def _find_packages(path):
+-if (_pkg_dir := sysconfig.get_config_var('WHEEL_PKG_DIR')) is not None:
++if (_pkg_dir := sysconfig.get_config_var('DO_NOT_USE_WHEEL_PKG_DIR')) is not None:
+     _WHEEL_PKG_DIR = Path(_pkg_dir).resolve()
+ else:
+     _WHEEL_PKG_DIR = None
 --- a/debian/control
 +++ b/debian/control
-@@ -52,8 +52,6 @@
+@@ -55,8 +55,6 @@
  Multi-Arch: allowed
  Priority: optional
- Depends: python3.12 (= ${binary:Version}),
+ Depends: python3.13 (= ${binary:Version}),
 - python3-pip-whl (>= 22.2),
 - python3-setuptools-whl,
   ${shlibs:Depends}, ${misc:Depends},
  Breaks: python3-pip (<< 1.5.6-4)
- Description: Interactive high-level object-oriented language (pyvenv binary, version 3.12)
+ Description: Interactive high-level object-oriented language (pyvenv binary, version 3.13)
 --- a/debian/control.in
 +++ b/debian/control.in
-@@ -52,8 +52,6 @@
+@@ -55,8 +55,6 @@
  Multi-Arch: allowed
  Priority: @PRIO@
  Depends: @PVER@ (= ${binary:Version}),

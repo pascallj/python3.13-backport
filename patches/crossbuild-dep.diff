@@ -19,7 +19,7 @@ Author: Pascal Roeleven <dev@pascalroeleven.nl>
  
  	: # devhelp docs
 -	cd $(buildd_static) && ./python ../debian/pyhtml2devhelp.py \
-+	cd $(buildd_static) && python3.12 ../debian/pyhtml2devhelp.py \
++	cd $(buildd_static) && python3.13 ../debian/pyhtml2devhelp.py \
  		../$(d_doc)/usr/share/doc/$(p_base)/html index.html $(VER) \
  		> ../$(d_doc)/usr/share/doc/$(p_base)/html/$(PVER).devhelp
  	gzip -9nv $(d_doc)/usr/share/doc/$(p_base)/html/$(PVER).devhelp
