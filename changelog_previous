@@ -1,0 +1,5 @@
+python3.13 (3.13.2-1~bpo12+1) bookworm-backports; urgency=medium
+
+  * Rebuild for bookworm-backports.
+
+ -- Pascal Roeleven <dev@pascalroeleven.nl>  Wed, 05 Feb 2025 13:47:51 +0000
