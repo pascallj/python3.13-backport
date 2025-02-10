@@ -12,14 +12,6 @@ Author: Pascal Roeleven <dev@pascalroeleven.nl>
  
  # TODO: these hang/fail with new OpenSSL
  PROFILE_EXCLUDES += \
-@@ -367,7 +367,6 @@
- 		--enable-loadable-sqlite-extensions \
- 		--with-dbmliborder=$(dbmliborder) \
- 		--with-computed-gotos \
--		--without-ensurepip \
- 		--with-system-expat \
- 		$(if $(filter hurd, $(DEB_HOST_ARCH_OS)),,--with-dtrace) \
- 		--with-ssl-default-suites=openssl \
 @@ -575,7 +574,7 @@
  endif
  TESTOPTS = -j 1 -w -u$(TEST_RESOURCES) --timeout=3600
